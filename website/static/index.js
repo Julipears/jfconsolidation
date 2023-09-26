@@ -40,3 +40,29 @@ function toggleView(elementID) {
     viewForm.style.display = "none";
   }
 }
+
+// allowing only .jf files instead of redirecting to error page
+document.getElementById("fileInput").addEventListener("change", validateFile)
+function validateFile() {
+  const allowedExtension = 'jf';
+  const {name:fileName} = this.files[0];
+  const fileExtension = fileName.split(".").pop();
+  if(!allowedExtension.includes(fileExtension)) {
+    alert("File type not allowed. Please upload a .jf file");
+    this.value = null;
+  }
+}
+
+var col1 = document.getElementsByClassName("collapsible-bar");
+var i;
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}

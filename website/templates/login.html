@@ -2,7 +2,7 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %}
 
 {% block content %}
-<form method="POST">
+<form action="{{ url_for('auth.login') }}" method="post">
   <h3 align="center">Login</h3>
   <div class="form-group">
     <label for="email">Email Address</label>
@@ -24,7 +24,11 @@
     placeholder="Enter password"
     />
   </div>
+  <div class="bare-underline">
+    <!--Implement forgot password-->
+  </div>
   <br />
   <button type="submit" class="btn btn-primary">Login</button>
+  <button type="signup" class="btn btn-primary">Signup</button>
 </form>
 {% endblock %}

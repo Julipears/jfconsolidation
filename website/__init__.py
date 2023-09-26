@@ -18,11 +18,13 @@ def create_app():
     # have blueprints that contain different views
     # tells flask where to locate URLs
     from .views import views
+    from .auth import auth
 
     # define new URLs within auth using @auth.route(url)
     # (same for views)
     # any URL defined within views or auth will be prefixed by url_prefix
     app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/')
 
         # define classes before creating database
     from .models import User, Note

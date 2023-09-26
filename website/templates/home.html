@@ -2,12 +2,21 @@
 
 {% block title %}Home{% endblock %}
 
+<!--To Do:
+- write the contact page
+- reformat the home page
+- implement signup
+- continue to next steps
+
+-->
+
 {% block style %}
 <!-- aligns text boxes -->
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <br />
 <h1 align="center">Shipment Overview</h1>
 <br />
@@ -18,41 +27,48 @@
   <p>Volumetric Weight (CBM): {{shipment.volumetric_weight}}</p>
 </div>
 
-<div class="sidebar">
-  <h2>Consolidate Boxes</h2>
-  <div class="select-btn">
-    <span class="btn-text">Select Box</span>
-    <span class="arrow-dwn">
-      <i class="fa-solid fa-chevron-down"></i>
-    </span>
-  </div>
-  <ul class="list-items">
-    <!-- list of boxes to consolidate goes here -->
-    <div id="boxes-consolidate"></div>
-    <div class="consolidated-dimensions">
-      <input type="text" id="length-cons" name="length-cons" placeholder="Length" 
-        class="form-control small-input consolidate"
-        required
-      >
-      <input type="text" id="width-cons" name="width-cons" placeholder="Width" 
-      class="form-control small-input consolidate"
-      required
-      >
-      <input type="text" id="height-cons" name="height-cons" placeholder="Height" 
-        class="form-control small-input consolidate"
-        required
-      >
-    </div>
-  </ul>
+<!-- Here \/ -->
+<div class="collapsible-content">
+  <div class="sidebar">
+    <h2 class="collapsible-title">
+      <a data-toggle="collapse" href="#accordion">Consolidate Boxes</a>
+    </h2>
+    <div id="accordion" class="panel-collapse collapse">
+      <div class="select-btn">
+        <span class="btn-text">Select Box</span>
+        <span class="arrow-dwn">
+          <i class="fa-solid fa-chevron-down"></i>
+        </span>
+      </div>
+      <ul class="list-items">
+        <!-- list of boxes to consolidate goes here -->
+        <div id="boxes-consolidate"></div>
+        <div class="consolidated-dimensions">
+          <input type="text" id="length-cons" name="length-cons" placeholder="Length" 
+            class="form-control small-input consolidate"
+            required
+          >
+          <input type="text" id="width-cons" name="width-cons" placeholder="Width" 
+          class="form-control small-input consolidate"
+          required
+          >
+          <input type="text" id="height-cons" name="height-cons" placeholder="Height" 
+            class="form-control small-input consolidate"
+            required
+          >
+        </div>
+      </ul>
 
-  <button 
-    class="save-btn"
-    onClick="if (this.classList.contains('consolidate')) {
-        consolidate(); 
-      }"
-    >
-    Consolidate Boxes
-  </button>
+      <button 
+        class="save-btn"
+        onClick="if (this.classList.contains('consolidate')) {
+            consolidate(); 
+          }"
+        >
+        Consolidate Boxes
+      </button>
+    </div>
+  </div>
 </div>
 
 <button class="view-btn" onclick="showView('packageView')" align="center">Package View</button>

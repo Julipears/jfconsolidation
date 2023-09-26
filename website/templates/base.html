@@ -42,11 +42,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
+          <!--
           <a class="nav-item nav-link" id="Home" href="/">Home</a>
           <a class="nav-item nav-link" id="addOrder" href="{{ url_for('views.add_order') }}">Add Order</a>
           <a class="nav-item nav-link" id="exportExcel" href="{{ url_for('views.download_excel') }}">Download as Excel Sheet</a>
           <a class="nav-item nav-link" id="showUpload" href="{{ url_for('views.upload_data') }}">Import Data</a>
           <a class="nav-item nav-link" id="exportData" href="{{ url_for('views.export_data') }}">Export Data</a>
+          -->
+          <a class="nav-item nav-link" id="Home" href="/">Home</a>
+          <a class="nav-item nav-link" id="aboutJF" href="https://jenikfreight.com/">About Jenik Freight</a>
+          <a class="nav-item nav-link" id="contact" href="contact.html">Contact</a>
+          <a class="nav-item nav-link" id="login-signup" href="{{ url_for('auth.login') }}">Login/Signup</a> <!--this part is not working-->
         </div>
       </div>
     </nav>
