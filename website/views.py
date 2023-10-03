@@ -31,6 +31,13 @@ def home():
     # passes user as a variable to be used in template
     return render_template("home.html", shipment=shipment, package_num=shipment.package_num)
 
+@views.route('/account', methods=['GET', 'POST'])
+def user_info():
+    if request.method == 'POST':
+        pass
+    # want to get back the orders under a user
+    return render_template("user_info.html", shipment=shipment, package_num=shipment.package_num)
+
 @views.route('/upload', methods=['GET', 'POST'])
 def upload_data():
     global session
@@ -54,7 +61,7 @@ def upload_data():
             shipment = session.active_shipment
 
             flash('Session data uploaded', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.user_info'))
 
         except pickle.UnpicklingError:
             return "Error unpickling the file. File upload failed."

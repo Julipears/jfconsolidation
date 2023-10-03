@@ -33,7 +33,7 @@ def create_app():
     with app.app_context():
         db.create_all()
     
-    """
+
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'     # where to go if not logged in
     login_manager.init_app(app)
@@ -41,7 +41,7 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
-    """
+
 
     return app
 

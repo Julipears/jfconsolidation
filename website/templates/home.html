@@ -4,9 +4,10 @@
 
 <!--To Do:
 - write the contact page
-- reformat the home page
-- implement signup
-- continue to next steps
+- change redirect page from login
+- implement redirect page from load session
+- make order page
+- figure out how to make sure people are signed in, different states w/ signout if they are signed in
 
 -->
 
@@ -18,322 +19,84 @@
 {% block content %}
 
 <br />
-<h1 align="center">Shipment Overview</h1>
+<div class="homepage-description">
+  <p>
+    Thank you for choosing Jenik Freight. We offer air freight services from Canada to Nigeria.
+  </p>
+  <p>
+    If you are a first-time customer, click on <span class="emphasis-body">Add Order</span> to begin. 
+  </p>
+  <p>
+    If you are a returning customer, click on <span class="emphasis-body">Load Session</span> or 
+    <span class="emphasis-body">Login</span> to restore your orders from a previous session.
+  </p>
+</div>
+
 <br />
-<div class="shipment-summary">
-  <p>Number of packages: {{shipment.package_num}}</p>
-  <p>Number of packages with batteries: {{shipment.battery_num}}</p>
-  <p>Gross Weight (kg): {{shipment.gross_weight}}</p>
-  <p>Volumetric Weight (CBM): {{shipment.volumetric_weight}}</p>
+<div class="order-button-section">
+  <button 
+    class="action-button"
+    onClick='goToOrder()'>
+    Add Order
+  </button>
+
+  <br />
+
+  {% if not current_user.is_authenticated %}
+  <button
+    class="action-button"
+    onClick='goToLogin()'>
+    Load Session
+  </button>
+  {% else %}
+  <button
+    class="action-button"
+    onClick='goToLoad()'>
+    Load Session
+  </button>
+  {% endif %}
 </div>
 
-<!-- Here \/ -->
-<div class="collapsible-content">
-  <div class="sidebar">
-    <h2 class="collapsible-title">
-      <a data-toggle="collapse" href="#accordion">Consolidate Boxes</a>
-    </h2>
-    <div id="accordion" class="panel-collapse collapse">
-      <div class="select-btn">
-        <span class="btn-text">Select Box</span>
-        <span class="arrow-dwn">
-          <i class="fa-solid fa-chevron-down"></i>
-        </span>
-      </div>
-      <ul class="list-items">
-        <!-- list of boxes to consolidate goes here -->
-        <div id="boxes-consolidate"></div>
-        <div class="consolidated-dimensions">
-          <input type="text" id="length-cons" name="length-cons" placeholder="Length" 
-            class="form-control small-input consolidate"
-            required
-          >
-          <input type="text" id="width-cons" name="width-cons" placeholder="Width" 
-          class="form-control small-input consolidate"
-          required
-          >
-          <input type="text" id="height-cons" name="height-cons" placeholder="Height" 
-            class="form-control small-input consolidate"
-            required
-          >
-        </div>
-      </ul>
-
-      <button 
-        class="save-btn"
-        onClick="if (this.classList.contains('consolidate')) {
-            consolidate(); 
-          }"
-        >
-        Consolidate Boxes
-      </button>
-    </div>
-  </div>
-</div>
-
-<button class="view-btn" onclick="showView('packageView')" align="center">Package View</button>
-<button class="view-btn" onclick="showView('orderView')" align="center">Order View</button>
 <br />
-
-
-<div id="packageView" class="view active">
-  <!-- Content for Package View -->
-  <h2>Package Information</h2>
-  <p>This is the package view content.</p>
-
-  <ul class="list-group list-group-flush" id="packages">
-    {% for pk in shipment.packages %}
-    <li class="list-group-item">
-      <div class="order-info toggle-section"
-          onClick="toggleView('packageview-{{ pk.package_id }}')">
-        <a href="{{ url_for('views.pk_details', pk_id=pk.package_id) }}">
-          {{"Box " ~ pk.package_id}}
-        </a>
-        {% if pk.has_batteries %}
-        <span>
-          <i class="fa-solid fa-battery-full"></i>
-        </span>
-        {% endif %}
-        {% if pk.fragile %}
-        <span>
-          <i class="fa-solid fa-house-crack"></i>
-        </span>
-        {% endif %}
-        <span class="description">{{"— " ~ pk.shipper.name}}</span>
-        {% if pk.validate() != True %}
-        <i class="fa-solid fa-circle-exclamation"
-        title="Missing the following details: {{pk.validate()}}"
-        ></i>
-        <span class="description"></span>
-        {% endif %}
-        <span class="actions">
-          <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">Delete</a>
-        </span>
-      </div>
-      
-      <div id="packageview-{{ pk.package_id }}" class="view-form" style="display: none;">
-        <p>Description: {{ pk.description }}</p>
-        <p>Dimensions: {{ pk.view_dimensions() }} {{pk.dim_units}}</p>
-        <p>Weight: {{ pk.weight }} kg</p>
-        
-        <!-- these are not showing properly -->
-        {% if pk.packages is defined %}
-          {% for box in pk.packages %}
-          {% set pk_id = box.package_id %}
-          <div class="order-info toggle-section"
-            onClick="toggleView('packageview-{{ pk_id }}')">
-            <a href="{{ url_for('views.pk_details', pk_id=pk_id) }}">{{"Box " ~ pk_id}}</a>
-            {% if pk.has_batteries %}
-            <span>
-              <i class="fa-solid fa-battery-full"></i>
-            </span>
-            {% endif %}
-            {% if pk.fragile %}
-            <span>
-              <i class="fa-solid fa-house-crack"></i>
-            </span>
-            {% endif %}
-            <span class="description">{{"— " ~ box.shipper.name}}</span>
-            <span class="actions">
-              <a href="javascript:void(0);" onClick="delete_package('{{ pk_id }}')">Delete</a>
-            </span>
-          </div>
-          <div id="packageview-{{ pk_id }}" class="view-form" style="display: none;">
-            <strong> This box is consolidated. </strong>
-            <p>Description: {{ box.description }}</p>
-            <p>Dimensions: {{ box.view_dimensions() }} {{box.dim_units}}</p>
-            <p>Weight: {{ box.weight }} kg</p>
-          </div>
-          
-          {% endfor %}
-        {% endif %}
-
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
-
-<div id="orderView" class="view">
-  <!-- Content for Order View -->
-  <h2>Order Information</h2>
-  <p>This is the order view content.</p>
-  <ul class="list-group list-group-flush" id="packages">
-    {% for order in shipment.orders %}
-    <li class="list-group-item">
-      <div class="order-info">
-        <a href="{{ url_for('views.view_order', order_id=order.id) }}">
-          {{ order.customer.name }}
-        </a>
-        <span class="description">{{" — " ~ order.packages|length ~ " packages" }}</span>
-        <span class="actions">
-          <a href="{{ url_for('views.add_package', order_id=order.id) }}" class="btn btn-link">Add Package</a>
-        </span>
-      </div>
-
-      <br>
-      <ul class="list-group list-group-flush" id="packages">
-        {% for pk in order.packages %}
-        <div class="order-info toggle-section"
-          onClick="toggleView('orderview-{{ pk.package_id }}')">
-
-          <a href="{{ url_for('views.pk_details', pk_id=pk.package_id) }}">
-            {{"Box " ~ pk.package_id}}
-          </a>
-          {% if pk.has_batteries %}
-          <span>
-            <i class="fa-solid fa-battery-full"></i>
-          </span>
-          {% endif %}
-          {% if pk.fragile %}
-          <span>
-            <i class="fa-solid fa-house-crack"></i>
-          </span>
-          {% endif %}
-          <span class="description">{{"— " ~ pk.description}}</span>
-          <span class="actions">
-            <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">Delete</a>
-          </span>
-          
-        </div>
-        <div id="orderview-{{ pk.package_id }}" class="view-form" style="display: none;">
-          {% if pk.consolidated %}
-          <strong> This box is consolidated. </strong>
-          {% endif %}
-          <p>Dimensions: {{ pk.dimensions }} {{pk.dim_units}}</p>
-          <p>Weight (kg): {{ pk.weight }}</p>
-        </div>
-        {% endfor %}
+<div class="homepage-calculations">
+  <p>How costs are calculated:</p>
+  <ol>
+    <li>Package Costs
+      <ul>
+        <li>Cargo must be <span class="emphasis-point">at least 10kg</span>. Cargo weighing less than 10kg will be charged as if it weighs 10kg.</li>
+        <li>Cost is calculated based on physical weight (kg) or volumetric weight (kg), whichever one is higher.</li>
+        <li>General cargo rate: <span class="emphasis-point">$13/kg</span>.</li>
+        <li>Cargo containing lithium batteries, including laptops, phones, and anything rechargeable: <span class="emphasis-point">$14/kg</span>.</li>
       </ul>
     </li>
-    {% endfor %}
-  </ul>
+    
+    <li>Insurance
+      <ul>
+        <li>Insurance is minimum $100, and will be the higher between <span class="emphasis-point">$100 or 2% of the declared value of the cargo</span>.</li>
+      </ul>
+    </li>
+
+    <li>Delivery
+      <ul>
+        <li>Door-to-door delivery within Lagos costs a minimum of <span class="emphasis-point">$25</span> with an extra <span class="emphasis-point">$1/kg</span>.</li>
+        <li>Door-to-door delivery outside Lagos costs a minimum of <span class="emphasis-point">$50</span> with an extra <span class="emphasis-point">$1.5/kg</span>.</li>
+      </ul>
+    </li>
+  </ol>
 </div>
 
 <script>
 
-// for toggling view of package
-document.addEventListener('DOMContentLoaded', function() {
-    // Find all elements with the class 'clickable-div'
-    var viewable_sections = document.querySelectorAll('.toggle-section');
-    
-    // Attach a click event listener to each clickable div
-    viewable_sections.forEach(function(div) {
-        div.addEventListener('click', function(event) {
-            // prevents links within div from working
-            //event.preventDefault();
-            
-            // Get the value for the toggleView function from the data attribute
-            var toggleValue = div.getAttribute('id');
-            
-            // Call the toggleView function with the provided value
-            toggleView(toggleValue);
-        });
-    });
-});
-
-// for toggling between package and order view
-function showView(viewId) {
-    // Hide all views first
-    const views = document.getElementsByClassName('view');
-    for (let i = 0; i < views.length; i++) {
-        views[i].classList.remove('active');
-    }
-
-    // Show the selected view
-    document.getElementById(viewId).classList.add('active');
+function goToOrder() {
+  location.href="{{ url_for('views.add_order') }}";
 }
 
-const selectBtn = document.querySelector(".select-btn"),
-      saveBtn = document.querySelector(".save-btn"),
-      cnsDim = document.querySelector(".consolidated-dimensions");
-let items = document.querySelectorAll(".item");
-
-selectBtn.addEventListener('click', () =>{
-  selectBtn.classList.toggle('open');
-})
-
-function toggleChecked(item) {
-  item.classList.toggle('checked');
-  let checked = document.querySelectorAll('.checked');
-  let btnText = document.querySelector('.btn-text');
-
-  // minimum number of boxes to consolidate is now one
-  // this way, large boxes get labelling priority
-  if (checked.length >= 1) {
-    btnText.innerText = `${checked.length} boxes selected`;
-    if (!saveBtn.classList.contains('consolidate')) {
-      saveBtn.classList.add('consolidate');
-      cnsDim.classList.add('consolidate');
-    }
-  } else {
-    if (checked.length == 1) {
-      btnText.innerText = "Select A Second Box";
-    } else {
-      btnText.innerText = "Select Box";
-    }
-    if (saveBtn.classList.contains('consolidate')) {
-      saveBtn.classList.remove('consolidate');
-      cnsDim.classList.remove('consolidate');
-    }
-  }
+function goToLogin() {
+  location.href="{{ url_for('auth.login') }}";
 }
 
-function attachEventListeners() {
-  items = document.querySelectorAll(".item");
-  items.forEach(item => {
-    item.addEventListener('click', () => {
-      toggleChecked(item);
-    });
-  });
-}
-
-
-function box_dropdowns() {
-  var box_num = {{ shipment.package_num }};
-  var box_ids = {{ shipment.package_id_list|tojson }}
-  let boxSectionHTML = "";
-
-  for (let i = 0; i < box_num; i++) {
-    boxSectionHTML += `
-    <li class="item" value="${box_ids[i]}">
-      <span class="checkbox">
-        <i class="fa-solid fa-check check-icon"></i>
-      </span>
-      <span class="item-text">Box ${box_ids[i]}</span>
-    </li>
-    `;
-  }
-
-  document.getElementById("boxes-consolidate").innerHTML = boxSectionHTML;
-  attachEventListeners();
-};
-
-box_dropdowns();
-
-function consolidate() {
-  // sends post request to delete-note endpoint
-  console.log('consolidating');
-
-  // which items are checked
-  items = document.querySelectorAll(".item");
-  checked_items = []
-  items.forEach(item => {
-    if (item.classList.contains('checked')) {
-      val = item.getAttribute('value')
-      console.log(val);
-      checked_items.push(val)
-    }
-  });
-
-  // FIXME send dimensions to consolidate_package in index.js
-  // not sure how to fetch value from length object
-  length = document.getElementById("length-cons");
-  width = document.getElementById("width-cons");
-  height = document.getElementById("height-cons");
-  console.log('length of consolidated box:');
-  console.log(length);
-  consolidate_package(checked_items);
+function goToLoad() {
+  location.href="{{ url_for('views.upload_data')}}";
 }
 
 </script>

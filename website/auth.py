@@ -8,6 +8,7 @@ from . import db       # means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
+loggedIn = False
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -20,9 +21,10 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Login Successful', category='success')
                 login_user(user, remember=True)
-                return redirect(url_for('views.home'))
+                return redirect(url_for('views.home')) #views.user_info after it has been implemented
             else:
                 flash('Incorrect password', category='error')
+                email = request.form.get('email')
         else:
             flash('Email does not exist', category='error')
     # request stores information sent in form
@@ -37,7 +39,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('views.home'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -72,6 +74,6 @@ def sign_up():
             login_user(new_user, remember=True)
             flash('Account created', category='success')
                 # format: blueprint_name.function_name
-            return redirect(url_for('views.home'))
+            return redirect(url_for('auth.login'))
 
     return render_template("signup.html", user=current_user)

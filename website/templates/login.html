@@ -29,6 +29,15 @@
   </div>
   <br />
   <button type="submit" class="btn btn-primary">Login</button>
-  <button type="signup" class="btn btn-primary">Signup</button>
 </form>
+
+<button type="signup" class="btn btn-primary" onClick='signUp()'>Signup</button>
+
+
+<script>
+function signUp() {
+  location.href="{{ url_for('auth.sign_up') }}";
+}
+</script>
+
 {% endblock %}
