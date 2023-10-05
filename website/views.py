@@ -31,7 +31,7 @@ def home():
     # passes user as a variable to be used in template
     return render_template("home.html", shipment=shipment, package_num=shipment.package_num)
 
-@views.route('/account', methods=['GET', 'POST'])
+@views.route('/orders', methods=['GET', 'POST'])
 def user_info():
     if request.method == 'POST':
         pass
@@ -186,7 +186,7 @@ def view_order():
             print('deleting order')
             shipment.remove_from_shipment(order)
             flash('Order removed', category='success')
-            return render_template("home.html", shipment=shipment, package_num=shipment.package_num)
+            return render_template("user_info.html", shipment=shipment, package_num=shipment.package_num)
         
     data = form_autofill.get_autofill_dict(order=order)
     return render_template('view_order.html', order=order, data=data)

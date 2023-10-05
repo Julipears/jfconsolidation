@@ -21,10 +21,6 @@
 <!-- Here \/ -->
 <div class="collapsible-content">
   <div class="sidebar">
-    <h2 class="collapsible-title">
-      <a data-toggle="collapse" href="#accordion">Consolidate Boxes</a>
-    </h2>
-    <div id="accordion" class="panel-collapse collapse">
       <div class="select-btn">
         <span class="btn-text">Select Box</span>
         <span class="arrow-dwn">
@@ -58,12 +54,12 @@
         >
         Consolidate Boxes
       </button>
-    </div>
   </div>
 </div>
 
 <button class="view-btn" onclick="showView('packageView')" align="center">Package View</button>
 <button class="view-btn" onclick="showView('orderView')" align="center">Order View</button>
+<button class="action-btn" onclick="goTo('Excel')" align="center">Export Excel Sheet</button>
 <br />
 
 
@@ -71,6 +67,7 @@
   <!-- Content for Package View -->
   <h2>Package Information</h2>
   <p>This is the package view content.</p>
+  <br />
 
   <ul class="list-group list-group-flush" id="packages">
     {% for pk in shipment.packages %}
@@ -98,7 +95,7 @@
         <span class="description"></span>
         {% endif %}
         <span class="actions">
-          <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">Delete</a>
+          <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">&times;</a>
         </span>
       </div>
       
@@ -126,7 +123,7 @@
             {% endif %}
             <span class="description">{{"— " ~ box.shipper.name}}</span>
             <span class="actions">
-              <a href="javascript:void(0);" onClick="delete_package('{{ pk_id }}')">Delete</a>
+              <a href="javascript:void(0);" onClick="delete_package('{{ pk_id }}')">&times;</a>
             </span>
           </div>
           <div id="packageview-{{ pk_id }}" class="view-form" style="display: none;">
@@ -149,6 +146,11 @@
   <!-- Content for Order View -->
   <h2>Order Information</h2>
   <p>This is the order view content.</p>
+  <br />
+  <!--change this \/\/\/-->
+  <button class="action-button" onclick='goToOrder()'>Add Order</button>
+  <br />
+
   <ul class="list-group list-group-flush" id="packages">
     {% for order in shipment.orders %}
     <li class="list-group-item">
@@ -183,7 +185,7 @@
           {% endif %}
           <span class="description">{{"— " ~ pk.description}}</span>
           <span class="actions">
-            <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">Delete</a>
+            <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">&times;</a>
           </span>
           
         </div>
@@ -326,6 +328,17 @@ function consolidate() {
   console.log(length);
   consolidate_package(checked_items);
 }
+
+function goTo(loc) {
+    if (loc == 'Order') {
+        location.href="{{ url_for('views.add_order') }}";
+    } else if (loc == 'Export') {
+        location.href="{{ url_for('views.export_data') }}";
+    } else if (loc == 'Excel') {
+        location.href="{{ url_for('views.download_excel') }}";
+    }
+}
+
 
 </script>
   

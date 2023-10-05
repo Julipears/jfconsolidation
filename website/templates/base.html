@@ -56,14 +56,40 @@
           <a class="nav-item nav-link" id="Home" href="/">Home</a>
           <a class="nav-item nav-link" id="aboutJF" href="https://jenikfreight.com/" target="_blank">About Jenik Freight</a>
           <a class="nav-item nav-link" id="contact" href="contact.html" target="_blank">Contact</a>
+          <a class="nav-item nav-link" id="curr-session" href="{{ url_for('views.user_info') }}">Current Session</a>
           {% if current_user.is_authenticated %}
-            <a class="nav-item nav-link" id="logout" href="{{ url_for('auth.logout') }}">Logout</a>
+            <a class="nav-item nav-link" id="logout" href="#" onclick="confirmation()">Logout</a>
           {% else %}
             <a class="nav-item nav-link" id="login-signup" href="{{ url_for('auth.login') }}">Login/Signup</a>
           {% endif %}
         </div>
       </div>
     </nav>
+
+    <div id="logout-confirm" class="popup-modal">
+
+      <!-- Modal content -->
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" onclick="cancel_logout()">&times;</button>
+          <h2>Would you like to export the current session before logging out?</h2>
+        </div>
+        <div class="modal-body">
+          <div class="body-text">
+            <p>Note that the current session will not be saved due to security reasons.</p>
+            <p>If you log out without exporting the current session, all changes you have made will be lost.</p>
+          </div> 
+          <div class="modal-buttons">
+            <button class="export" onclick="confirm_export()">Export Current Session</button>
+            <button class="log-out" onclick="confirm_logout()">Logout</button>
+            <button class="cancel" onclick="cancel_logout()">Cancel</button>
+
+          </div> 
+        </div>
+      </div>
+    
+    </div>
 
       <!-- show flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -117,5 +143,33 @@
       type="text/javascript"
       src="{{ url_for('static', filename='index.js') }}"
     ></script>
+
+    <script>
+
+      // When the user clicks on the button, open the modal
+      function confirmation() {
+        document.getElementById("logout-confirm").style.display = "block";
+      }
+
+      function confirm_export() {
+        location.href = "{{ url_for('views.export_data') }}";
+      }
+
+      function confirm_logout() {
+        document.getElementById("logout-confirm").style.display = "none";
+        location.href = "{{ url_for('auth.logout') }}";
+      }
+
+      function cancel_logout() {
+        document.getElementById("logout-confirm").style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == document.getElementById("logout-confirm")) {
+          document.getElementById("logout-confirm").style.display = "none";
+        }
+      }
+
+    </script>
   </body>
 </html>

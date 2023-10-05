@@ -4,10 +4,8 @@
 
 <!--To Do:
 - write the contact page
-- change redirect page from login
-- implement redirect page from load session
-- make order page
-- figure out how to make sure people are signed in, different states w/ signout if they are signed in
+- figure out how to make consolidate boxes work
+- pretty formatting
 
 -->
 
@@ -20,37 +18,42 @@
 
 <br />
 <div class="homepage-description">
+  {% if not current_user.is_authenticated %}
   <p>
     Thank you for choosing Jenik Freight. We offer air freight services from Canada to Nigeria.
   </p>
+  {% else %}
   <p>
-    If you are a first-time customer, click on <span class="emphasis-body">Add Order</span> to begin. 
+    Welcome back, {{ current_user.first_name }}!
   </p>
+  {% endif %}
   <p>
-    If you are a returning customer, click on <span class="emphasis-body">Load Session</span> or 
-    <span class="emphasis-body">Login</span> to restore your orders from a previous session.
+    Click on <span class="emphasis-body">Add Order</span> to add a new package. 
   </p>
+  {% if not current_user.is_authenticated %}
+  <p>
+    Or, click on <span class="emphasis-body">Login</span> to restore your packages and orders from a previous session.
+  </p>
+  {% else %}
+  <p>
+    Or, click on <span class="emphasis-body">Load Session</span> to restore your packages and orders from a previous session.
+  </p>
+  {% endif %}
 </div>
 
 <br />
 <div class="order-button-section">
   <button 
-    class="action-button"
+    class="action-btn"
     onClick='goToOrder()'>
-    Add Order
+    Add Package
   </button>
 
   <br />
 
-  {% if not current_user.is_authenticated %}
+  {% if current_user.is_authenticated %}
   <button
-    class="action-button"
-    onClick='goToLogin()'>
-    Load Session
-  </button>
-  {% else %}
-  <button
-    class="action-button"
+    class="action-btn"
     onClick='goToLoad()'>
     Load Session
   </button>
@@ -89,10 +92,6 @@
 
 function goToOrder() {
   location.href="{{ url_for('views.add_order') }}";
-}
-
-function goToLogin() {
-  location.href="{{ url_for('auth.login') }}";
 }
 
 function goToLoad() {

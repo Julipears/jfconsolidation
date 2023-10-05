@@ -16,7 +16,7 @@ fetch('/delete-package', {
   method: 'POST',
   body: JSON.stringify({pk_id: pk_id, delete_type: delete_type})
 }).then((_res) => {
-  window.location.href = '/';
+  window.location.href = '/orders';
 })
 }
 
@@ -26,7 +26,7 @@ function consolidate_package(checked_items) {
     body: JSON.stringify(checked_items),
   }).then((_res) => {
     console.log('redirect after consolidating');
-    window.location.href = '/';
+    window.location.href = '/orders';
   })
 }
 
