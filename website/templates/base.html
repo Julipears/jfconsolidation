@@ -33,7 +33,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="navbar-headerbar">
-        <a class="navbar-header-txt" style="color:lightgray;">Jenik Freight Online Ordering Form</a>
+        <a class="navbar-header-txt" style="color:lightgray;" href="/">Jenik Freight Online Ordering Form</a>
       </div>
       <br />
       <button 
@@ -56,10 +56,12 @@
           <a class="nav-item nav-link" id="Home" href="/">Home</a>
           <a class="nav-item nav-link" id="aboutJF" href="https://jenikfreight.com/" target="_blank">About Jenik Freight</a>
           <a class="nav-item nav-link" id="contact" href="contact.html" target="_blank">Contact</a>
-          <a class="nav-item nav-link" id="curr-session" href="{{ url_for('views.user_info') }}">Current Session</a>
+          
           {% if current_user.is_authenticated %}
+            <a class="nav-item nav-link" id="curr-session" href="{{ url_for('views.user_info') }}">Current Session</a>
             <a class="nav-item nav-link" id="logout" href="#" onclick="confirmation()">Logout</a>
           {% else %}
+            <a class="nav-item nav-link" id="curr-session" href="{{ url_for('auth.login') }}">Current Session</a>
             <a class="nav-item nav-link" id="login-signup" href="{{ url_for('auth.login') }}">Login/Signup</a>
           {% endif %}
         </div>

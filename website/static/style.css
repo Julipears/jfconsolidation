@@ -51,6 +51,10 @@
   cursor: pointer;
 }
 
+.action-button:hover, .action-button:active {
+  text-decoration:none;
+}
+
 .actions a {
   margin-left: 10px;
 }
@@ -81,15 +85,18 @@
 .save-btn {
   display: flex;
   height: 50px;
-  background: #bababa;
-  color: #000;
+  background: #0dacc8;
+  color: #fff;
+  font-weight: bold;
   align-items: center;
   justify-content: space-between;
   padding: 16px;
   margin-top: 15px;
   border-radius: 8px;
   cursor: none;
+  float: left;
 }
+
 
 .save-btn.consolidate {
   background: #0dacc8;
@@ -271,6 +278,10 @@ body {
   margin-right: auto;
   padding-bottom: 10px;
   vertical-align: top;
+}
+
+.navbar-header-txt:active, .navbar-header-txt:hover {
+  text-decoration: none;
 }
 
 .popup-modal {

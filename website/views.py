@@ -132,7 +132,7 @@ def pk_details(pk_id):
         elif form_data['save_btn'] == 'additional-info':
             form_autofill.assign_package_info(package, form_data)
             saver.save_data(session)
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.user_info'))
         elif form_data['save_btn'] == 'add-cons-package':
             pass
         else:

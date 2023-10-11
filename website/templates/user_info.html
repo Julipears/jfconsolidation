@@ -47,7 +47,7 @@
       </ul>
 
       <button 
-        class="save-btn"
+        class="action-btn"
         onClick="if (this.classList.contains('consolidate')) {
             consolidate(); 
           }"
@@ -66,7 +66,7 @@
 <div id="packageView" class="view active">
   <!-- Content for Package View -->
   <h2>Package Information</h2>
-  <p>This is the package view content.</p>
+  <p>See below for all packages and consolidated boxes that have been logged</p>
   <br />
 
   <ul class="list-group list-group-flush" id="packages">
@@ -95,7 +95,7 @@
         <span class="description"></span>
         {% endif %}
         <span class="actions">
-          <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">&times;</a>
+          <a href="javascript:void(0);" class="action-button" onClick="delete_package('{{pk.package_id}}', 'permanent')">&times;</a>
         </span>
       </div>
       
@@ -123,7 +123,7 @@
             {% endif %}
             <span class="description">{{"— " ~ box.shipper.name}}</span>
             <span class="actions">
-              <a href="javascript:void(0);" onClick="delete_package('{{ pk_id }}')">&times;</a>
+              <a href="javascript:void(0);" class="action-button" onClick="delete_package('{{ pk_id }}')">&times;</a>
             </span>
           </div>
           <div id="packageview-{{ pk_id }}" class="view-form" style="display: none;">
@@ -185,7 +185,7 @@
           {% endif %}
           <span class="description">{{"— " ~ pk.description}}</span>
           <span class="actions">
-            <a href="javascript:void(0);" onClick="delete_package('{{pk.package_id}}', 'permanent')">&times;</a>
+            <a href="javascript:void(0);" class="action-button" onClick="delete_package('{{pk.package_id}}', 'permanent')">&times;</a>
           </span>
           
         </div>
