@@ -195,16 +195,19 @@ def view_order():
 def add_order():
     global shipment
     global debugging
+    data=request.form
+    customer=None
+    shipper=None
+    consignee=None
+    order=None
+    form_data=request.form
     if request.method == 'POST':
-        form_data = request.form
-        #action = form_data.get('action')
-
-        customer = None
+        action = form_data.get('action')
         # NOTE: 
         # default unit for weight is kg
         # delivery address == consignee address
         # fragile option doesn't do anything; need to add to shipping_objects
-        if True: #action == 'add':
+        if action == 'add':
             box_num = form_data.get('box-count')
             shipper_name = form_data.get('shipper-name')
             shipper_address = form_data.get('shipper-address')
@@ -292,8 +295,8 @@ def add_order():
                 
                 saver.save_data(session)
                 return redirect(url_for('views.home'))
-        else: #elif action == 'cancel':
-            return redirect(url_for('views.home'))
+        else:
+            return redirect(url_for('views.home')) # this is not running properly to return to home
         '''
         elif action == 'form_autofill':
             # this is the key of the relevant response in form_data
@@ -323,7 +326,7 @@ def add_order():
         data = form_autofill.get_autofill_dict(debugging=False)
         form_data = None
         '''
-        data = form_autofill.get_autofill_dict(customer, consignee, order)
+    data = form_autofill.get_autofill_dict(customer, consignee, order)
 
     return render_template('add_order.html', data=data, form_data=form_data)
 
