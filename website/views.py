@@ -132,7 +132,7 @@ def pk_details(pk_id):
         elif form_data['save_btn'] == 'additional-info':
             form_autofill.assign_package_info(package, form_data)
             saver.save_data(session)
-            return redirect(url_for('views.user_info'))
+            return redirect(url_for('views.home'))
         elif form_data['save_btn'] == 'add-cons-package':
             pass
         else:
@@ -191,52 +191,65 @@ def view_order():
     data = form_autofill.get_autofill_dict(order=order)
     return render_template('view_order.html', order=order, data=data)
 
-@views.route('/add-order', methods=['GET', 'POST'])
+@views.route('/add-order', methods=['GET', 'POST']) # still need to link this to html somehow
 def add_order():
     global shipment
     global debugging
-    form_autofill.google_login()
     if request.method == 'POST':
         form_data = request.form
-        action = form_data.get('action')
+        #action = form_data.get('action')
 
         customer = None
         # NOTE: 
         # default unit for weight is kg
         # delivery address == consignee address
         # fragile option doesn't do anything; need to add to shipping_objects
-        if action == 'add':
+        if True: #action == 'add':
             box_num = form_data.get('box-count')
+            shipper_name = form_data.get('shipper-name')
+            shipper_address = form_data.get('shipper-address')
+            shipper_city = form_data.get('shipper-city')
+            shipper_state = form_data.get('shipper-state')
+            shipper_zip = form_data.get('shipper-zip')
+            shipper_phone = form_data.get('shipper-phone')
+            shipper_email = form_data.get('shipper-email')
+            consignee_name = form_data.get('consignee-name')
+            consignee_address = form_data.get('consignee-address')
+            consignee_city = form_data.get('consignee-city')
+            consignee_state = form_data.get('consignee-state')
+            consignee_zip = form_data.get('consignee-zip')
+            consignee_phone = form_data.get('consignee-phone')
+            consignee_email = form_data.get('consignee-email')
+
             if int(box_num) < 1 or box_num is None:
                 error_message = "Please enter a valid number of boxes (greater than 0)."
                 flash(error_message, category='error')
             else:
                 # assumes shipper = customer
                 customer = Customer(
-                    name=form_data['shipper-name'], 
-                    address=form_data['shipper-address'], 
-                    city=form_data['shipper-city'], 
-                    state=form_data['shipper-state'], 
-                    zip_code=form_data['shipper-zip'], 
-                    phone=form_data['shipper-phone'], 
-                    email=form_data['shipper-email'])
+                    name=shipper_name, 
+                    address=shipper_address, 
+                    city=shipper_city, 
+                    state=shipper_state, 
+                    zip_code=shipper_zip, 
+                    phone=shipper_phone, 
+                    email=shipper_email)
                 shipper = Shipper(
-                    name=form_data['shipper-name'], 
-                    address=form_data['shipper-address'], 
-                    city=form_data['shipper-city'], 
-                    state=form_data['shipper-state'], 
-                    zip_code=form_data['shipper-zip'], 
-                    phone=form_data['shipper-phone'], 
-                    email=form_data['shipper-email'])
+                    name=shipper_name, 
+                    address=shipper_address, 
+                    city=shipper_city, 
+                    state=shipper_state, 
+                    zip_code=shipper_zip, 
+                    phone=shipper_phone, 
+                    email=shipper_email)
                 consignee = Consignee(
-                    name=form_data['consignee-name'], 
-                    address=form_data['consignee-address'], 
-                    city=form_data['consignee-city'], 
-                    state=form_data['consignee-state'], 
-                    zip_code=form_data['consignee-zip'], # returns blank string if nothing there
-                    phone=form_data['consignee-phone'], 
-                    email=form_data['consignee-email'])
-                
+                    name=consignee_name, 
+                    address=consignee_address, 
+                    city=consignee_city, 
+                    state=consignee_state, 
+                    zip_code=consignee_zip, # returns blank string if nothing there
+                    phone=consignee_phone, 
+                    email=consignee_email)
                 pickup_address = None
                 if form_data.get('office-drop-off') == 'drop-off':
                     office_dropoff = True
@@ -279,8 +292,9 @@ def add_order():
                 
                 saver.save_data(session)
                 return redirect(url_for('views.home'))
-        elif action == 'cancel':
+        else: #elif action == 'cancel':
             return redirect(url_for('views.home'))
+        '''
         elif action == 'form_autofill':
             # this is the key of the relevant response in form_data
             # as defined in google_form_autofill
@@ -308,7 +322,9 @@ def add_order():
     else:
         data = form_autofill.get_autofill_dict(debugging=False)
         form_data = None
-    
+        '''
+        data = form_autofill.get_autofill_dict(customer, consignee, order)
+
     return render_template('add_order.html', data=data, form_data=form_data)
 
 @views.route("/ajaxlivesearch", methods=['POST', 'GET'])

@@ -1,16 +1,9 @@
-from .forms_api import google_forms_autofill as forms
 """
 For autofilling. Assumes IDs of html elements remain the same.
 """
 
 enable_api = True
 creds = None
-
-def google_login():
-   creds = forms.authenticate_user(creds=forms.creds)
-   forms.initialize_sheets(creds=creds)
-   forms.creds = creds
-   return creds
 
 
 def fill_default_box_values(data):
@@ -153,21 +146,6 @@ def autofill_from_form(form_data):
     fill_default_box_values(data)
     
     return data
-
-def fetch_responses(rows=20):
-   """
-   Fetch responses to display for add_order.html.
-   """
-   form_data = forms.get_response_data(rows=rows)
-   return form_data
-
-def test_autofill():
-   form_data = forms.get_response_data(rows=2)
-   keys = list(form_data.keys())
-   response = form_data[keys[1]]
-   data = autofill_from_form(response)
-   return data
-
 
 def get_autofill_dict(customer=None, consignee=None, order=None, debugging=False):
     """

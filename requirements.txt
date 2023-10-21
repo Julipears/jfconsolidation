@@ -16,3 +16,4 @@ requests
 requests-oauthlib
 uritemplate
 urllib3
+werkzeug==2.2.3

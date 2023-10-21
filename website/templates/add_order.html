@@ -10,62 +10,36 @@
 <h1 align="center">New Order</h1>
 <br />
 
-{% if form_data is not none %}
-<form action="{{ url_for('views.add_order') }}" method="POST">
-  <h2>Form Responses</h2>
-  <button type="submit" class="btn btn-primary" name="action" value="form_autofill">Add From Form</button>
-  <!--How many items are showing-->
-  <!--Passed to endpoint for consistency-->
-  <input type="hidden" id="data-length" name="data_length" value="{{ form_data.items() | length }}">
-
-  <div id="scroll-container" class="scrollable-container">
-    <div id="data-container">
-      {% for timestamp, response in form_data.items() %}
-      <div class="response-item">
-        <input type="radio" name="selected-response" 
-          id="response-{{ timestamp }}" 
-          value="{{ timestamp }}"
-        >
-        <label for="response-{{ timestamp }}">
-          <p><a href="{{ response['response_link'] }}" target="_blank">{{ timestamp }}:</a> {{ response['shipper']['shipper_name'] }}—{{ response['shipper']['shipper_email'] }}</p>
-        </label>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</form>
-{% endif %}
-
 <form action="{{ url_for('views.add_order') }}" method="POST">
   <h2>Shipper</h2>
   <!-- #region shipper -->
   <div class="form-section">
     <label for="shipper-name">Name *</label>
-    <input type="text" id="shipper-name" name="shipper-name" value="{{data['shipper_name']}}" required>
+    <input type="text" id="shipper-name" name="shipper-name"/>
   </div>
   <div class="form-section">
     <label for="shipper-address">Address *</label>
-    <textarea id="shipper-address" name="shipper-address" required>{{data['shipper_address']}}</textarea>
+    <input type="text" id="shipper-address" name="shipper-address"/>
   </div>
   <div class="form-section form-inline">
     <label for="shipper-city">City *</label>
-    <input type="text" id="shipper-city" name="shipper-city" value="{{data['shipper_city']}}" required>
+    <input type="text" id="shipper-city" name="shipper-city"/>
   </div>
   <div class="form-section form-inline">
     <label for="shipper-state">State/Province *</label>
-    <input type="text" id="shipper-state" name="shipper-state" value="{{data['shipper_state']}}" required>
+    <input type="text" id="shipper-state" name="shipper-state"/>
   </div>
   <div class="form-section form-inline">
     <label for="shipper-zip">Zip Code</label>
-    <input type="text" id="shipper-zip" name="shipper-zip" value="{{data['shipper_zip']}}">
+    <input type="text" id="shipper-zip" name="shipper-zip"/>
   </div>
   <div class="form-section">
     <label for="shipper-phone">Phone *</label>
-    <input type="text" id="shipper-phone" name="shipper-phone" value="{{data['shipper_phone']}}" required>
+    <input type="text" id="shipper-phone" name="shipper-phone"/>
   </div>
   <div class="form-section">
     <label for="shipper-email">Email *</label>
-    <input type="email" id="shipper-email" name="shipper-email" value="{{data['shipper_email']}}" required>
+    <input type="email" id="shipper-email" name="shipper-email"/>
   </div>
   <!-- #endregion -->
 
@@ -73,32 +47,32 @@
   <!-- #region consignee -->
   <div class="form-section">
     <label for="consignee-name">Name *</label>
-    <input type="text" id="consignee-name" name="consignee-name" value="{{data['consignee_name']}}" required>
+    <input type="text" id="consignee-name" name="consignee-name"/>
   </div>
   <div class="form-section">
     <label for="consignee-address">Address *</label>
-    <textarea id="consignee-address" name="consignee-address" required>{{data['consignee_address']}}</textarea>
+    <input type="text" id="consignee-address" name="consignee-address"/>
   </div>
 
   <div class="form-section form-inline">
     <label for="consignee-city">City *</label>
-    <input type="text" id="consignee-city" name="consignee-city" value="{{data['consignee_city']}}" required>
+    <input type="text" id="consignee-city" name="consignee-city"/>
   </div>
   <div class="form-section form-inline">
     <label for="consignee-state">State/Province *</label>
-    <input type="text" id="consignee-state" name="consignee-state" value="{{data['consignee_state']}}" required>
+    <input type="text" id="consignee-state" name="consignee-state"/>
   </div>
   <div class="form-section form-inline">
     <label for="consignee-zip">Zip Code</label>
-    <input type="text" id="consignee-zip" name="consignee-zip" value="{{data['consignee_zip']}}">
+    <input type="text" id="consignee-zip" name="consignee-zip"/>
   </div>
   <div class="form-section">
     <label for="consignee-phone">Phone *</label>
-    <input type="text" id="consignee-phone" name="consignee-phone" value="{{data['consignee_phone']}}" required>
+    <input type="text" id="consignee-phone" name="consignee-phone"/>
   </div>
   <div class="form-section">
     <label for="consignee-email">Email</label>
-    <input type="text" id="consignee-email" name="consignee-email" value="{{data['consignee_email']}}">
+    <input type="text" id="consignee-email" name="consignee-email"/>
   </div>
   <!-- #endregion-->
 
@@ -175,7 +149,7 @@
   <h2>Package Information</h2>
   <div class="form-section">
     <label for="box-count">Number of Boxes *</label>
-    <input type="number" id="box-count" name="box-count" value={{data['box_num']}} required>
+    <input type="number" id="box-count" name="box-count"/>
   </div>
 
   <div id="box-information-section"></div>
